@@ -103,19 +103,19 @@ export default function HistoryPage() {
 
         {reports.map((report) => (
 
-          <div
-            key={report.id}
-            className="bg-[#1F2937] rounded-3xl p-5 border border-gray-700 shadow-xl"
-          >
+  <a
+    key={report.id}
+    href={`/report/${report.id}`}
+    className="block bg-[#1F2937] rounded-3xl p-5 border border-gray-700 shadow-xl hover:border-cyan-500"
+  >
 
             <div className="flex items-center justify-between">
 
               <div>
 
                 <div className="text-xl font-bold">
-                  {report.reportName ||
-                    "Untitled Report"}
-                </div>
+  {report.reportName || "Untitled Report"}
+</div>
 
                 <div className="text-gray-400 mt-1 text-sm">
                   {report.date}
@@ -190,22 +190,44 @@ export default function HistoryPage() {
             </div>
 
             {/* BUTTON */}
-            <div className="mt-5">
+            {/* BUTTONS */}
 
-              <button
-                onClick={() =>
-                  deleteReport(report.id)
-                }
-                className="w-full bg-red-500 hover:bg-red-400 rounded-2xl py-3 font-bold"
-              >
+<div className="mt-5 flex gap-3">
 
-                DELETE REPORT
+  <a
+    href={`/report/${report.id}`}
+    className="
+      flex-1
+      text-center
+      bg-cyan-500
+      hover:bg-cyan-400
+      rounded-2xl
+      py-3
+      font-bold
+    "
+  >
+    VIEW REPORT
+  </a>
 
-              </button>
+  <button
+    onClick={() =>
+      deleteReport(report.id)
+    }
+    className="
+      flex-1
+      bg-red-500
+      hover:bg-red-400
+      rounded-2xl
+      py-3
+      font-bold
+    "
+  >
+    DELETE REPORT
+  </button>
 
-            </div>
+</div>
 
-          </div>
+          </a>
 
         ))}
 
