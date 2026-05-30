@@ -872,10 +872,22 @@ const exportPDF = async () => {
               </th>
 
               <th className="text-left">
-                Measure b
-              </th>
-              
-              <th className="text-left">
+  Measure b
+</th>
+
+<th className="text-left">
+  ΔL
+</th>
+
+<th className="text-left">
+  Δa
+</th>
+
+<th className="text-left">
+  Δb
+</th>
+
+<th className="text-left">
   Tape
 </th>
 
@@ -1028,6 +1040,56 @@ const exportPDF = async () => {
                       className="w-20 bg-[#111827] border border-gray-600 rounded-lg px-2 py-2"
                     />
                   </td>
+                  {/* DELTA L */}
+<td
+  className={
+    Math.abs(
+      row.measureL -
+      row.targetL
+    ) > 2
+      ? "text-red-400 font-bold"
+      : "text-green-400"
+  }
+>
+  {(
+    row.measureL -
+    row.targetL
+  ).toFixed(2)}
+</td>
+
+{/* DELTA A */}
+<td
+  className={
+    Math.abs(
+      row.measureA -
+      row.targetA
+    ) > 2
+      ? "text-red-400 font-bold"
+      : "text-green-400"
+  }
+>
+  {(
+    row.measureA -
+    row.targetA
+  ).toFixed(2)}
+</td>
+
+{/* DELTA B */}
+<td
+  className={
+    Math.abs(
+      row.measureB -
+      row.targetB
+    ) > 2
+      ? "text-red-400 font-bold"
+      : "text-green-400"
+  }
+>
+  {(
+    row.measureB -
+    row.targetB
+  ).toFixed(2)}
+</td>
 
 {/* TAPE */}
 <td>
