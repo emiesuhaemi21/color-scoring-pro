@@ -71,6 +71,36 @@ const [condition, setCondition] =
 
 const [opacity, setOpacity] =
   useState(false);
+
+// JOB INFORMATION
+const [jobInfo, setJobInfo] = useState({
+  jobName: "",
+  customer: "",
+  operator: "",
+  machine: "",
+  shift: "",
+
+  substrateType: "",
+  substrateColor: "",
+  thickness: "",
+  width: "",
+
+  inkSupplier: "",
+  inkType: "",
+  inkSeries: "",
+  inkBatch: "",
+
+  plateSupplier: "",
+  plateSpecs: "",
+  plateThickness: "",
+  plateLine: "",
+  plateSleeve: "",
+
+  machineName: "",
+  speed: "",
+  printingType: "",
+});
+
   // COLOR DATA
   const [rows, setRows] = useState<ColorRow[]>([
   {
@@ -457,6 +487,7 @@ const totalScore = useMemo(() => {
 
       totalScore,
 
+      
       rows,
     };
 
@@ -720,6 +751,273 @@ const exportPDF = async () => {
       Use Opacity
 
     </label>
+
+  </div>
+
+</div>
+{/* JOB INFORMATION */}
+
+<div className="bg-[#1F2937] rounded-3xl p-5 border border-gray-700 mb-6">
+
+  <h2 className="text-xl font-bold mb-4">
+    Job Information
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <input
+      placeholder="Job Name"
+      value={jobInfo.jobName}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          jobName: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Customer"
+      value={jobInfo.customer}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          customer: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Operator"
+      value={jobInfo.operator}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          operator: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Machine"
+      value={jobInfo.machine}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          machine: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Shift"
+      value={jobInfo.shift}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          shift: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+  </div>
+
+
+</div>
+<div className="bg-[#1F2937] rounded-3xl p-5 border border-gray-700 mb-6">
+
+  <h2 className="text-xl font-bold mb-4">
+    Substrate
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <input
+      placeholder="Substrate Type"
+      value={jobInfo.substrateType}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          substrateType: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Substrate Colour"
+      value={jobInfo.substrateColor}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          substrateColor: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Thickness"
+      value={jobInfo.thickness}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          thickness: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Width"
+      value={jobInfo.width}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          width: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+  </div>
+
+</div>
+{/* INK INFORMATION */}
+
+<div className="bg-[#1F2937] rounded-3xl p-5 border border-gray-700 mb-6">
+
+  <h2 className="text-xl font-bold mb-4">
+    Ink Information
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <input
+      placeholder="Ink Supplier"
+      value={jobInfo.inkSupplier}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          inkSupplier: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Ink Type"
+      value={jobInfo.inkType}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          inkType: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Ink Series"
+      value={jobInfo.inkSeries}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          inkSeries: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Ink Batch"
+      value={jobInfo.inkBatch}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          inkBatch: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+  </div>
+
+</div>
+{/* PLATE INFORMATION */}
+
+<div className="bg-[#1F2937] rounded-3xl p-5 border border-gray-700 mb-6">
+
+  <h2 className="text-xl font-bold mb-4">
+    Plate Information
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <input
+      placeholder="Plate Supplier"
+      value={jobInfo.plateSupplier}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          plateSupplier: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Plate Specs"
+      value={jobInfo.plateSpecs}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          plateSpecs: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Plate Thickness"
+      value={jobInfo.plateThickness}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          plateThickness: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Plate Line Screen"
+      value={jobInfo.plateLine}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          plateLine: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
+
+    <input
+      placeholder="Plate Sleeve"
+      value={jobInfo.plateSleeve}
+      onChange={(e) =>
+        setJobInfo({
+          ...jobInfo,
+          plateSleeve: e.target.value,
+        })
+      }
+      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+    />
 
   </div>
 
