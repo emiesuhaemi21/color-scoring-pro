@@ -2,8 +2,25 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Color from "colorjs.io";
 
 export default function ReportPage() {
+  function getLabColor(
+  l: number,
+  a: number,
+  b: number
+) {
+  try {
+    const color = new Color(
+      "lab",
+      [l, a, b]
+    );
+
+    return color.to("srgb").toString();
+  } catch {
+    return "#999999";
+  }
+}
   const params = useParams();
 
   const [report, setReport] =
@@ -94,7 +111,70 @@ export default function ReportPage() {
         </div>
 
       </div>
+{/* JOB INFORMATION */}
 
+<div className="border rounded-xl p-4 mb-6">
+
+  <h2 className="text-xl font-bold mb-4">
+    JOB INFORMATION
+  </h2>
+
+  <div className="grid grid-cols-2 gap-3">
+
+    <div>
+      <strong>Job Name:</strong>{" "}
+      {report.jobInfo?.jobName}
+    </div>
+
+    <div>
+      <strong>Customer:</strong>{" "}
+      {report.jobInfo?.customer}
+    </div>
+
+    <div>
+      <strong>Operator:</strong>{" "}
+      {report.jobInfo?.operator}
+    </div>
+
+    <div>
+      <strong>Shift:</strong>{" "}
+      {report.jobInfo?.shift}
+    </div>
+
+  </div>
+
+</div>
+<div className="border rounded-xl p-4 mb-6">
+
+  <h2 className="text-xl font-bold mb-4">
+    SUBSTRATE INFORMATION
+  </h2>
+
+  <div className="grid grid-cols-2 gap-3">
+
+    <div>
+      <strong>Type:</strong>{" "}
+      {report.jobInfo?.substrateType}
+    </div>
+
+    <div>
+      <strong>Color:</strong>{" "}
+      {report.jobInfo?.substrateColor}
+    </div>
+
+    <div>
+      <strong>Thickness:</strong>{" "}
+      {report.jobInfo?.thickness}
+    </div>
+
+    <div>
+      <strong>Width:</strong>{" "}
+      {report.jobInfo?.width}
+    </div>
+
+  </div>
+
+</div>
       {/* TABLE */}
 
       <table className="w-full border-collapse border border-gray-400">
@@ -103,75 +183,147 @@ export default function ReportPage() {
 
           <tr className="bg-gray-100">
 
-            <th className="border p-2">
-              Color
-            </th>
+  <th className="border p-2">
+    Review
+  </th>
 
-            <th className="border p-2">
-              Target LAB
-            </th>
+  <th className="border p-2">
+    Color
+  </th>
 
-            <th className="border p-2">
-              Measure LAB
-            </th>
+  <th className="border p-2">
+    Target LAB
+  </th>
 
-            <th className="border p-2">
-              ΔE
-            </th>
+  <th className="border p-2">
+    Measure LAB
+  </th>
 
-          </tr>
+  <th className="border p-2">
+    Difference
+  </th>
+
+  <th className="border p-2">
+    Tape
+  </th>
+
+  <th className="border p-2">
+    Viscosity
+  </th>
+
+  <th className="border p-2">
+    ΔE
+  </th>
+
+</tr>
 
         </thead>
 
         <tbody>
 
           {report.rows.map(
-            (row: any, index: number) => {
+  (row: any, index: number) => {
 
-              const delta =
-                Math.sqrt(
-                  Math.pow(
-                    row.targetL -
-                      row.measureL,
-                    2
-                  ) +
-                    Math.pow(
-                      row.targetA -
-                        row.measureA,
-                      2
-                    ) +
-                    Math.pow(
-                      row.targetB -
-                        row.measureB,
-                      2
-                    )
-                ).toFixed(2);
+    const delta =
+      Math.sqrt(
+        Math.pow(
+          row.targetL -
+            row.measureL,
+          2
+        ) +
+          Math.pow(
+            row.targetA -
+              row.measureA,
+            2
+          ) +
+          Math.pow(
+            row.targetB -
+              row.measureB,
+            2
+          )
+      ).toFixed(2);
 
-              return (
-                <tr key={index}>
+    const dL =
+      row.measureL -
+      row.targetL;
 
-                  <td className="border p-2">
-                    {row.color}
-                  </td>
+    const dA =
+      row.measureA -
+      row.targetA;
 
-                  <td className="border p-2">
-                    L{row.targetL} a
-                    {row.targetA} b
-                    {row.targetB}
-                  </td>
+    const dB =
+      row.measureB -
+      row.targetB;
 
-                  <td className="border p-2">
-                    L{row.measureL} a
-                    {row.measureA} b
-                    {row.measureB}
-                  </td>
+    return (
+  <tr key={index}>
 
-                  <td className="border p-2">
-                    {delta}
-                  </td>
+    {/* REVIEW */}
+    <td className="border p-2">
 
-                </tr>
-              );
+  <div
+    className="w-10 h-10 rounded border border-gray-400"
+    style={{
+      backgroundColor:
+        getLabColor(
+          row.measureL,
+          row.measureA,
+          row.measureB
+        )
+    }}
+  />
+
+</td>
+
+    {/* COLOR */}
+    <td className="border p-2">
+      {row.color}
+    </td>
+
+    {/* TARGET */}
+    <td className="border p-2">
+      L{row.targetL}
+      <br />
+      a{row.targetA}
+      <br />
+      b{row.targetB}
+    </td>
+
+    {/* MEASURE */}
+    <td className="border p-2">
+      L{row.measureL}
+      <br />
+      a{row.measureA}
+      <br />
+      b{row.measureB}
+    </td>
+
+    {/* DIFFERENCE */}
+    <td className="border p-2">
+      ΔL {dL}
+      <br />
+      Δa {dA}
+      <br />
+      Δb {dB}
+    </td>
+
+    {/* TAPE */}
+    <td className="border p-2">
+      {row.tape || "-"}
+    </td>
+
+    {/* VISCOSITY */}
+    <td className="border p-2">
+      {row.viscosity || "-"}
+    </td>
+
+    {/* DELTA E */}
+    <td className="border p-2">
+      {delta}
+    </td>
+
+  </tr>
+);
             }
           )}
 
