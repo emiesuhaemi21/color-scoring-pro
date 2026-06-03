@@ -108,6 +108,11 @@ export default function ReportPage() {
             {report.totalScore}%
           </div>
 
+          <div>
+            <strong>Delta Mode:</strong>{" "}
+            {report.deltaMode || "E76"}
+         </div>
+
         </div>
 
       </div>
@@ -224,36 +229,10 @@ export default function ReportPage() {
           {report.rows.map(
   (row: any, index: number) => {
 
-    const delta =
-      Math.sqrt(
-        Math.pow(
-          row.targetL -
-            row.measureL,
-          2
-        ) +
-          Math.pow(
-            row.targetA -
-              row.measureA,
-            2
-          ) +
-          Math.pow(
-            row.targetB -
-              row.measureB,
-            2
-          )
-      ).toFixed(2);
 
-    const dL =
-      row.measureL -
-      row.targetL;
-
-    const dA =
-      row.measureA -
-      row.targetA;
-
-    const dB =
-      row.measureB -
-      row.targetB;
+    const dL = row.deltaL;
+const dA = row.deltaA;
+const dB = row.deltaB;
 
     return (
   <tr key={index}>
@@ -319,8 +298,8 @@ export default function ReportPage() {
 
     {/* DELTA E */}
     <td className="border p-2">
-      {delta}
-    </td>
+  {row.deltaE?.toFixed(2)}
+</td>
 
   </tr>
 );

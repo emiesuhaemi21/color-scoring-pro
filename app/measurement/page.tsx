@@ -478,18 +478,48 @@ const totalScore = useMemo(() => {
   const saveReport = () => {
 
     const report = {
-      id: Date.now(),
+  id: Date.now(),
 
-      reportName,
+  reportName,
 
-      date:
-        new Date().toLocaleString(),
+  date:
+    new Date().toLocaleString(),
 
-      totalScore,
+  totalScore,
 
-      
-      rows,
-    };
+  deltaMode,
+
+  jobInfo,
+
+  customer,
+  article,
+  supplierPlate,
+  operator,
+  machine,
+  jobNumber,
+
+  condition,
+  opacity,
+
+  rows: activeRows.map((row) => ({
+    ...row,
+
+    deltaE:
+      calculateDeltaE(row),
+
+    deltaL:
+      row.measureL -
+      row.targetL,
+
+    deltaA:
+      row.measureA -
+      row.targetA,
+
+    deltaB:
+      row.measureB -
+      row.targetB,
+  })),
+};
 
     const updatedReports = [
       report,
