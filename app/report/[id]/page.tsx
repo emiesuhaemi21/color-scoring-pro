@@ -75,11 +75,14 @@ export default function ReportPage() {
         </a>
 
         <button
-          onClick={() => window.print()}
-          className="bg-cyan-500 text-white px-4 py-2 rounded-xl"
-        >
-          Print Report
-        </button>
+  onClick={() => {
+    alert("Print clicked");
+    window.print();
+  }}
+  className="bg-cyan-500 text-white px-4 py-2 rounded-xl"
+>
+  Print Report
+</button>
 
       </div>
 
@@ -189,12 +192,24 @@ export default function ReportPage() {
           <tr className="bg-gray-100">
 
   <th className="border p-2">
-    Review
-  </th>
+  Deck No.
+</th>
 
-  <th className="border p-2">
-    Color
-  </th>
+<th className="border p-2">
+  Review
+</th>
+
+<th className="border p-2">
+  Color
+</th>
+
+<th className="border p-2">
+  Anilox (LCM)
+</th>
+
+<th className="border p-2">
+  Volume (cm³/m²)
+</th>
 
   <th className="border p-2">
     Target LAB
@@ -213,15 +228,19 @@ export default function ReportPage() {
   </th>
 
   <th className="border p-2">
-    Viscosity
-  </th>
+  Viscosity
+</th>
 
-  <th className="border p-2">
-  {report.deltaMode === "E2000"
-    ? "ΔE2000"
-    : report.deltaMode === "E94"
-    ? "ΔE94"
-    : "ΔE76"}
+<th className="border p-2">
+  Density
+</th>
+
+<th className="border p-2">
+  Δ{report.deltaMode}
+</th>
+
+<th className="border p-2">
+  Score
 </th>
 
 </tr>
@@ -240,6 +259,9 @@ const dB = row.deltaB;
 
     return (
   <tr key={index}>
+    <td className="border p-2">
+  {row.deckNo || "-"}
+</td>
 
     {/* REVIEW */}
     <td className="border p-2">
@@ -262,6 +284,14 @@ const dB = row.deltaB;
     <td className="border p-2">
       {row.color}
     </td>
+
+<td className="border p-2">
+  {row.aniloxLcm || "-"}
+</td>
+
+<td className="border p-2">
+  {row.aniloxVolume || "-"}
+</td>
 
     {/* TARGET */}
     <td className="border p-2">
@@ -300,9 +330,23 @@ const dB = row.deltaB;
       {row.viscosity || "-"}
     </td>
 
+    <td className="border p-2">
+  {row.viscosity || "-"}
+</td>
+
     {/* DELTA E */}
 <td className="border p-2">
   {row.deltaE?.toFixed(2)}
+</td>
+
+<td className="border p-2">
+  {Math.max(
+    0,
+    Math.round(
+      100 - row.deltaE * 10
+    )
+  )}
+  %
 </td>
 
   </tr>

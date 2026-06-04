@@ -25,8 +25,13 @@ type ColorRow = {
 
   enabled: boolean;
 
+  deckNo: string;
+  aniloxLcm: string;
+  aniloxVolume: string;
+
   tape: string;
-  viscosity: number;
+  viscosity: string;
+  density: string;
 
   targetL: number;
   targetA: number;
@@ -104,59 +109,79 @@ const [jobInfo, setJobInfo] = useState({
   // COLOR DATA
   const [rows, setRows] = useState<ColorRow[]>([
   {
-    color: "Cyan",
-    enabled: true,
+  color: "Cyan",
+  enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
 
-    targetL: 55,
-    targetA: -35,
-    targetB: -50,
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
-    measureL: 54,
-    measureA: -34,
-    measureB: -49,
-  },
+  targetL: 55,
+  targetA: -35,
+  targetB: -50,
 
-  {
-    color: "Magenta",
-    enabled: true,
-
-    tape: "Medium",
-viscosity: 18,
-
-    targetL: 48,
-    targetA: 74,
-    targetB: -5,
-
-    measureL: 49,
-    measureA: 72,
-    measureB: -6,
-  },
+  measureL: 54,
+  measureA: -34,
+  measureB: -49,
+},
 
   {
-    color: "Yellow",
-    enabled: true,
+  color: "Magenta",
+  enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
 
-    targetL: 90,
-    targetA: -5,
-    targetB: 90,
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
-    measureL: 91,
-    measureA: -4,
-    measureB: 88,
-  },
+  targetL: 48,
+  targetA: 74,
+  targetB: -5,
+
+  measureL: 49,
+  measureA: 72,
+  measureB: -6,
+},
+
+  {
+  color: "Yellow",
+  enabled: true,
+
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
+
+  targetL: 90,
+  targetA: -5,
+  targetB: 90,
+
+  measureL: 91,
+  measureA: -4,
+  measureB: 88,
+},
 
   {
     color: "Black",
     enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
     targetL: 20,
     targetA: 0,
@@ -169,10 +194,15 @@ viscosity: 18,
 
   {
     color: "Orange",
-    enabled: false,
+    enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
     targetL: 70,
     targetA: 35,
@@ -185,10 +215,15 @@ viscosity: 18,
 
   {
     color: "Green",
-    enabled: false,
+    enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
     targetL: 60,
     targetA: -60,
@@ -201,10 +236,15 @@ viscosity: 18,
 
   {
     color: "Violet",
-    enabled: false,
+    enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
     targetL: 40,
     targetA: 40,
@@ -217,10 +257,15 @@ viscosity: 18,
 
   {
     color: "White",
-    enabled: false,
+    enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
     targetL: 98,
     targetA: 0,
@@ -233,10 +278,15 @@ viscosity: 18,
 
   {
     color: "Spot 1",
-    enabled: false,
+    enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
     targetL: 50,
     targetA: 50,
@@ -249,10 +299,15 @@ viscosity: 18,
 
   {
     color: "Spot 2",
-    enabled: false,
+    enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
     targetL: 45,
     targetA: 20,
@@ -265,10 +320,15 @@ viscosity: 18,
 
   {
     color: "Spot 3",
-    enabled: false,
+    enabled: true,
 
-    tape: "Medium",
-viscosity: 18,
+  deckNo: "",
+  aniloxLcm: "",
+  aniloxVolume: "",
+
+  tape: "Medium",
+  viscosity: "",
+  density: "",
 
     targetL: 30,
     targetA: 10,
@@ -456,11 +516,14 @@ const totalScore = useMemo(() => {
   // UPDATE INPUT
   const stringFields = [
   "color",
-  "tape",
-  "viscosity",
-  "deckNumber",
+
+  "deckNo",
   "aniloxLcm",
   "aniloxVolume",
+
+  "tape",
+  "viscosity",
+  "density",
 ];
 
 const updateValue = (
@@ -1180,67 +1243,83 @@ const exportPDF = async () => {
 
             <tr className="text-gray-400 border-b border-gray-700">
 
-              <th className="text-left py-3">
-  Review
-</th>
+  <th className="text-left py-3">
+    Deck No.
+  </th>
 
-              <th className="text-left py-3">
-                Color
-              </th>
+  <th className="text-left py-3">
+    Review
+  </th>
 
-              <th className="text-left">
-                Target L
-              </th>
+  <th className="text-left py-3">
+    Color
+  </th>
 
-              <th className="text-left">
-                Target a
-              </th>
+  <th className="text-left py-3">
+    Anilox (LCM)
+  </th>
 
-              <th className="text-left">
-                Target b
-              </th>
+  <th className="text-left py-3">
+    Volume (cm³/m²)
+  </th>
 
-              <th className="text-left">
-                Measure L
-              </th>
+  <th className="text-left">
+    Target L
+  </th>
 
-              <th className="text-left">
-                Measure a
-              </th>
+  <th className="text-left">
+    Target a
+  </th>
 
-              <th className="text-left">
-  Measure b
-</th>
+  <th className="text-left">
+    Target b
+  </th>
 
-<th className="text-left">
-  ΔL
-</th>
+  <th className="text-left">
+    Measure L
+  </th>
 
-<th className="text-left">
-  Δa
-</th>
+  <th className="text-left">
+    Measure a
+  </th>
 
-<th className="text-left">
-  Δb
-</th>
+  <th className="text-left">
+    Measure b
+  </th>
 
-<th className="text-left">
-  Tape
-</th>
+  <th className="text-left">
+    ΔL
+  </th>
 
-<th className="text-left">
-  Viscosity
-</th>
+  <th className="text-left">
+    Δa
+  </th>
 
-              <th className="text-left">
-                Δ{deltaMode}
-              </th>
+  <th className="text-left">
+    Δb
+  </th>
 
-              <th className="text-left">
-                Score
-              </th>
+  <th className="text-left">
+    Tape
+  </th>
 
-            </tr>
+  <th className="text-left">
+    Viscosity
+  </th>
+
+  <th className="text-left">
+    Density
+  </th>
+
+  <th className="text-left">
+    Δ{deltaMode}
+  </th>
+
+  <th className="text-left">
+    Score
+  </th>
+
+</tr>
 
           </thead>
 
@@ -1262,6 +1341,21 @@ const exportPDF = async () => {
                   key={index}
                   className="border-b border-gray-800"
                 >
+<td>
+  <input
+    value={row.deckNo}
+    onChange={(e) =>
+      updateValue(
+        index,
+        "deckNo",
+        e.target.value
+      )
+    }
+    className="w-20 bg-[#111827] border border-gray-600 rounded-lg px-2 py-2"
+  />
+</td>
+
+{/* REVIEW */}
 <td className="py-3">
 
   <div
@@ -1278,11 +1372,42 @@ const exportPDF = async () => {
 
 </td>
 
-                  <td className="py-3 pr-2 font-medium">
-                    {row.color}
-                  </td>
+{/* COLOR */}
+<td className="py-3 pr-2 font-medium">
+  {row.color}
+</td>
 
-                  {/* TARGET L */}
+{/* ANILOX */}
+<td>
+  <input
+    value={row.aniloxLcm}
+    onChange={(e) =>
+      updateValue(
+        index,
+        "aniloxLcm",
+        e.target.value
+      )
+    }
+    className="w-24 bg-[#111827] border border-gray-600 rounded-lg px-2 py-2"
+  />
+</td>
+
+{/* VOLUME */}
+<td>
+  <input
+    value={row.aniloxVolume}
+    onChange={(e) =>
+      updateValue(
+        index,
+        "aniloxVolume",
+        e.target.value
+      )
+    }
+    className="w-24 bg-[#111827] border border-gray-600 rounded-lg px-2 py-2"
+  />
+</td>
+
+{/* TARGET L */}
                   <td>
                     <input
                       type="number"
@@ -1477,6 +1602,22 @@ const exportPDF = async () => {
 
 </td>
 
+{/* DENSITY */}
+<td>
+
+  <input
+    value={row.density}
+    onChange={(e) =>
+      updateValue(
+        index,
+        "density",
+        e.target.value
+      )
+    }
+    className="w-24 bg-[#111827] border border-gray-600 rounded-lg px-2 py-2"
+  />
+
+</td>
                   {/* DELTA */}
                   <td className="font-semibold">
                     {de}
