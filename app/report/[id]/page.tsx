@@ -110,8 +110,8 @@ export default function ReportPage() {
 
           <div>
             <strong>Delta Mode:</strong>{" "}
-            {report.deltaMode || "E76"}
-         </div>
+            {report.deltaMode}
+          </div>
 
         </div>
 
@@ -217,8 +217,12 @@ export default function ReportPage() {
   </th>
 
   <th className="border p-2">
-    ΔE
-  </th>
+  {report.deltaMode === "E2000"
+    ? "ΔE2000"
+    : report.deltaMode === "E94"
+    ? "ΔE94"
+    : "ΔE76"}
+</th>
 
 </tr>
 
@@ -297,7 +301,7 @@ const dB = row.deltaB;
     </td>
 
     {/* DELTA E */}
-    <td className="border p-2">
+<td className="border p-2">
   {row.deltaE?.toFixed(2)}
 </td>
 

@@ -454,25 +454,34 @@ const totalScore = useMemo(() => {
 };
 
   // UPDATE INPUT
-  const updateValue = (
-    index: number,
-    field: keyof ColorRow,
-    value: string
-  ) => {
+  const stringFields = [
+  "color",
+  "tape",
+  "viscosity",
+  "deckNumber",
+  "aniloxLcm",
+  "aniloxVolume",
+];
 
-    const updated = [...rows];
+const updateValue = (
+  index: number,
+  field: keyof ColorRow,
+  value: string
+) => {
+  const updated = [...rows];
 
-    updated[index] = {
-      ...updated[index],
+  updated[index] = {
+    ...updated[index],
 
-      [field]:
-        field === "color"
-          ? value
-          : Number(value),
-    };
-
-    setRows(updated);
+    [field]: stringFields.includes(
+      field as string
+    )
+      ? value
+      : Number(value),
   };
+
+  setRows(updated);
+};
 
   // SAVE REPORT
   const saveReport = () => {
