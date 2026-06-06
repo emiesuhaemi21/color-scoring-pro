@@ -1,5 +1,8 @@
 "use client";
 
+
+export const dynamic =
+  "force-dynamic";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -9,9 +12,6 @@ import {
   useEffect
 } from "react";
 
-import {
-  useSearchParams
-} from "next/navigation";
 
 import DeltaE from "delta-e";
 import Color from "colorjs.io";
@@ -62,17 +62,30 @@ type ColorLibrary = {
 
 export default function MeasurementPage() {
 
-  const searchParams =
-  useSearchParams();
-
-const editId =
-  searchParams.get("edit");
+  const [editId,
+  setEditId] =
+  useState<string | null>(
+    null
+  );
 
 const [editingId,
   setEditingId] =
   useState<number | null>(
     null
   );
+
+useEffect(() => {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  setEditId(
+    params.get("edit")
+  );
+
+}, []);
 
   // REPORT NAME
   const [reportName, setReportName] =
