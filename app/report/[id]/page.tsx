@@ -1,5 +1,8 @@
 "use client";
 
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Color from "colorjs.io";
@@ -16,15 +19,77 @@ export default function ReportPage() {
       [l, a, b]
     );
 
-    return color.to("srgb").toString();
-  } catch {
+    const result =
+      color.to("srgb").toString();
+
+    console.log(result);
+
+    return result;
+  } catch (e) {
+    console.log("ERROR", e);
     return "#999999";
   }
 }
   const params = useParams();
 
   const [report, setReport] =
-    useState<any>(null);
+  useState<any>(null);
+
+const exportPDF = async () => {
+  const reportArea =
+    document.getElementById(
+      "report-area"
+    );
+
+  if (!reportArea) {
+    alert("Report not found");
+    return;
+  }
+
+  const canvas =
+    await html2canvas(
+      reportArea,
+      {
+        scale: 2,
+      }
+    );
+
+  const imgData =
+    canvas.toDataURL(
+      "image/png"
+    );
+
+  const pdf =
+    new jsPDF(
+      "p",
+      "mm",
+      "a4"
+    );
+
+  const pageWidth =
+    pdf.internal.pageSize.getWidth();
+
+  const imgWidth =
+    pageWidth;
+
+  const imgHeight =
+    (canvas.height *
+      imgWidth) /
+    canvas.width;
+
+  pdf.addImage(
+    imgData,
+    "PNG",
+    0,
+    0,
+    imgWidth,
+    imgHeight
+  );
+
+  pdf.save(
+    `${report.reportName}.pdf`
+  );
+};
 
   useEffect(() => {
     const stored =
@@ -54,7 +119,10 @@ export default function ReportPage() {
     );
 
   return (
-    <main className="bg-white text-black min-h-screen p-10">
+  <main
+    id="report-area"
+    className="bg-white text-black min-h-screen p-10"
+  >
 
       {/* TOP MENU */}
 
@@ -75,13 +143,17 @@ export default function ReportPage() {
         </a>
 
         <button
-  onClick={() => {
-    alert("Print clicked");
-    window.print();
-  }}
+  onClick={() => window.print()}
   className="bg-cyan-500 text-white px-4 py-2 rounded-xl"
 >
   Print Report
+</button>
+
+<button
+  onClick={exportPDF}
+  className="bg-red-500 text-white px-4 py-2 rounded-xl"
+>
+  Export PDF
 </button>
 
       </div>
@@ -331,7 +403,7 @@ const dB = row.deltaB;
     </td>
 
     <td className="border p-2">
-  {row.viscosity || "-"}
+  {row.density || "-"}
 </td>
 
     {/* DELTA E */}

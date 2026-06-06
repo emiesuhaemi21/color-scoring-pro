@@ -3,7 +3,15 @@
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-import { useMemo, useState, useEffect } from "react";
+import {
+  useMemo,
+  useState,
+  useEffect
+} from "react";
+
+import {
+  useSearchParams
+} from "next/navigation";
 
 import DeltaE from "delta-e";
 import Color from "colorjs.io";
@@ -42,7 +50,29 @@ type ColorRow = {
   measureB: number;
 };
 
+type ColorLibrary = {
+  id: number;
+
+  name: string;
+
+  l: number;
+  a: number;
+  b: number;
+};
+
 export default function MeasurementPage() {
+
+  const searchParams =
+  useSearchParams();
+
+const editId =
+  searchParams.get("edit");
+
+const [editingId,
+  setEditingId] =
+  useState<number | null>(
+    null
+  );
 
   // REPORT NAME
   const [reportName, setReportName] =
@@ -51,6 +81,69 @@ export default function MeasurementPage() {
   // SAVED REPORTS
   const [savedReports, setSavedReports] =
     useState<any[]>([]);
+
+const [colorLibrary,
+  setColorLibrary] =
+  useState<ColorLibrary[]>([
+    {
+      id: 1,
+      name: "Process Cyan",
+      l: 55,
+      a: -35,
+      b: -50,
+    },
+
+    {
+      id: 2,
+      name: "Process Magenta",
+      l: 48,
+      a: 74,
+      b: -5,
+    },
+
+    {
+      id: 3,
+      name: "Process Yellow",
+      l: 90,
+      a: -5,
+      b: 90,
+    },
+
+    {
+      id: 4,
+      name: "Process Black",
+      l: 20,
+      a: 0,
+      b: 0,
+    },
+  ]);
+  useEffect(() => {
+
+  const saved =
+    localStorage.getItem(
+      "color-library"
+    );
+
+  if (saved) {
+
+    setColorLibrary(
+      JSON.parse(saved)
+    );
+
+  }
+
+}, []);
+useEffect(() => {
+
+  localStorage.setItem(
+    "color-library",
+    JSON.stringify(
+      colorLibrary
+    )
+  );
+
+}, [colorLibrary]);
+
 const [deltaMode, setDeltaMode] =
   useState("E2000");
   const [customer, setCustomer] =
@@ -105,6 +198,70 @@ const [jobInfo, setJobInfo] = useState({
   speed: "",
   printingType: "",
 });
+useEffect(() => {
+
+  if (!editId) return;
+
+  const stored =
+    localStorage.getItem(
+      "color-scoring-reports"
+    );
+
+  if (!stored) return;
+
+  const reports =
+    JSON.parse(stored);
+
+  const report =
+  reports.find(
+    (r: any) =>
+      r.id.toString() === editId
+  );
+
+console.log(
+  "EDIT ID:",
+  editId
+);
+
+console.log(
+  "ALL REPORTS:",
+  reports
+);
+
+console.log(
+  "REPORT FOUND:",
+  report
+);
+
+if (!report) return;
+
+  if (!report) return;
+
+  setEditingId(report.id);
+
+  setReportName(
+    report.reportName || ""
+  );
+
+  setDeltaMode(
+    report.deltaMode || "E2000"
+  );
+
+  setJobInfo(
+    report.jobInfo || {}
+  );
+
+  if (report.rows) {
+
+  console.log(
+    "ROWS:",
+    report.rows
+  );
+
+  setRows(report.rows);
+}
+
+}, [editId]);
 
   // COLOR DATA
   const [rows, setRows] = useState<ColorRow[]>([
@@ -550,7 +707,7 @@ const updateValue = (
   const saveReport = () => {
 
     const report = {
-  id: Date.now(),
+  id: editingId || Date.now(),
 
   reportName,
 
@@ -593,10 +750,25 @@ const updateValue = (
   })),
 };
 
-    const updatedReports = [
-      report,
-      ...savedReports,
-    ];
+    let updatedReports;
+
+if (editingId) {
+
+  updatedReports =
+    savedReports.map((r) =>
+      r.id === editingId
+        ? report
+        : r
+    );
+
+} else {
+
+  updatedReports = [
+    report,
+    ...savedReports,
+  ];
+
+}
 
     setSavedReports(updatedReports);
 
@@ -605,7 +777,11 @@ const updateValue = (
       JSON.stringify(updatedReports)
     );
 
-    alert("Report Saved!");
+    alert(
+  editingId
+    ? "Report Updated!"
+    : "Report Saved!"
+);
   };
   // EXPORT PDF
 const exportPDF = async () => {
@@ -1252,6 +1428,10 @@ const exportPDF = async () => {
   </th>
 
   <th className="text-left py-3">
+  Library
+</th>
+
+  <th className="text-left py-3">
     Color
   </th>
 
@@ -1371,7 +1551,71 @@ const exportPDF = async () => {
   />
 
 </td>
+<td>
 
+  <select
+    onChange={(e) => {
+
+      const selected =
+        colorLibrary.find(
+          (c) =>
+            c.id ===
+            Number(
+              e.target.value
+            )
+        );
+
+      if (!selected) return;
+
+      const updated =
+        [...rows];
+
+      updated[index] = {
+        ...updated[index],
+
+        color:
+          selected.name,
+
+        targetL:
+          selected.l,
+
+        targetA:
+          selected.a,
+
+        targetB:
+          selected.b,
+      };
+
+      setRows(updated);
+    }}
+    className="
+      bg-[#111827]
+      border
+      border-gray-600
+      rounded-lg
+      px-2
+      py-2
+    "
+  >
+
+    <option value="">
+      Select
+    </option>
+
+    {colorLibrary.map(
+      (item) => (
+        <option
+          key={item.id}
+          value={item.id}
+        >
+          {item.name}
+        </option>
+      )
+    )}
+
+  </select>
+
+</td>
 {/* COLOR */}
 <td className="py-3 pr-2 font-medium">
   {row.color}

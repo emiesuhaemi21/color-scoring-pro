@@ -195,35 +195,50 @@ export default function HistoryPage() {
 <div className="mt-5 flex gap-3">
 
   <a
-    href={`/report/${report.id}`}
-    className="
-      flex-1
-      text-center
-      bg-cyan-500
-      hover:bg-cyan-400
-      rounded-2xl
-      py-3
-      font-bold
-    "
-  >
-    VIEW REPORT
-  </a>
+  href={`/report/${report.id}`}
+  className="
+    flex-1
+    text-center
+    bg-cyan-500
+    hover:bg-cyan-400
+    rounded-2xl
+    py-3
+    font-bold
+  "
+>
+  VIEW REPORT
+</a>
 
-  <button
-    onClick={() =>
-      deleteReport(report.id)
-    }
-    className="
-      flex-1
-      bg-red-500
-      hover:bg-red-400
-      rounded-2xl
-      py-3
-      font-bold
-    "
-  >
-    DELETE REPORT
-  </button>
+<a
+  href={`/measurement?edit=${report.id}`}
+  className="
+    flex-1
+    text-center
+    bg-yellow-500
+    hover:bg-yellow-400
+    rounded-2xl
+    py-3
+    font-bold
+  "
+>
+  EDIT
+</a>
+
+<button
+  onClick={() =>
+    deleteReport(report.id)
+  }
+  className="
+    flex-1
+    bg-red-500
+    hover:bg-red-400
+    rounded-2xl
+    py-3
+    font-bold
+  "
+>
+  DELETE REPORT
+</button>
 
 </div>
 
