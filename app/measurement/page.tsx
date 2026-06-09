@@ -60,7 +60,19 @@ type ColorLibrary = {
   b: number;
 };
 
+type ColorPackage = {
+  id: number;
+
+  type: string;
+
+  name: string;
+
+  description: string;
+};
+
 export default function MeasurementPage() {
+
+  
 
   const [editId,
   setEditId] =
@@ -74,7 +86,25 @@ const [editingId,
     null
   );
 
+  const [packages,
+  setPackages] =
+  useState<ColorPackage[]>(
+    []
+  );
+
+const [libraryColors,
+  setLibraryColors] =
+  useState<any[]>(
+    []
+  );
+
+  const [selectedPackage,
+  setSelectedPackage] =
+  useState<number>(1);
+
 useEffect(() => {
+
+  
 
   const params =
     new URLSearchParams(
@@ -87,7 +117,49 @@ useEffect(() => {
 
 }, []);
 
+useEffect(() => {
+
+  const savedPackages =
+    localStorage.getItem(
+      "color-packages"
+    );
+
+  const savedColors =
+    localStorage.getItem(
+      "color-library-colors"
+    );
+
+  if (savedPackages) {
+
+    setPackages(
+      JSON.parse(
+        savedPackages
+      )
+    );
+
+  }
+
+  if (savedColors) {
+
+    setLibraryColors(
+      JSON.parse(
+        savedColors
+      )
+    );
+
+  }
+
+}, []);
+
+const filteredColors =
+  libraryColors.filter(
+    (c) =>
+      c.packageId ===
+      selectedPackage
+  );
+
   // REPORT NAME
+  
   const [reportName, setReportName] =
     useState("");
 
@@ -183,6 +255,8 @@ const [condition, setCondition] =
 const [opacity, setOpacity] =
   useState(false);
 
+  
+
 // JOB INFORMATION
 const [jobInfo, setJobInfo] = useState({
   jobName: "",
@@ -215,6 +289,8 @@ useEffect(() => {
 
   if (!editId) return;
 
+  
+
   const stored =
     localStorage.getItem(
       "color-scoring-reports"
@@ -224,6 +300,8 @@ useEffect(() => {
 
   const reports =
     JSON.parse(stored);
+
+    
 
   const report =
   reports.find(
@@ -275,6 +353,8 @@ if (!report) return;
 }
 
 }, [editId]);
+
+
 
   // COLOR DATA
   const [rows, setRows] = useState<ColorRow[]>([
@@ -941,6 +1021,60 @@ const exportPDF = async () => {
   </button>
 
 </div>
+<div className="bg-[#1F2937] border border-gray-700 rounded-2xl p-4 mb-5">
+
+  <div className="font-bold mb-3">
+    Color Library
+  </div>
+
+  <div className="flex gap-4">
+
+    <div>
+
+      <label className="block mb-1">
+        Package
+      </label>
+
+      <select
+        value={selectedPackage}
+        onChange={(e) =>
+          setSelectedPackage(
+            Number(
+              e.target.value
+            )
+          )
+        }
+        className="
+          bg-[#111827]
+          border
+          border-gray-600
+          rounded-lg
+          px-3
+          py-2
+        "
+      >
+
+        {packages.map(
+          (pkg) => (
+
+            <option
+              key={pkg.id}
+              value={pkg.id}
+            >
+              {pkg.name}
+            </option>
+
+          )
+        )}
+
+      </select>
+
+    </div>
+
+  </div>
+
+</div>
+
 <div className="bg-[#1F2937] rounded-3xl p-5 border border-gray-700 mb-6">
 
   <h2 className="text-xl font-bold mb-5">
@@ -1570,7 +1704,7 @@ const exportPDF = async () => {
     onChange={(e) => {
 
       const selected =
-        colorLibrary.find(
+  libraryColors.find(
           (c) =>
             c.id ===
             Number(
@@ -1615,7 +1749,7 @@ const exportPDF = async () => {
       Select
     </option>
 
-    {colorLibrary.map(
+    {libraryColors.map(
       (item) => (
         <option
           key={item.id}
