@@ -1,6 +1,7 @@
 "use client";
 
 
+import Select from "react-select";
 export const dynamic =
   "force-dynamic";
 import jsPDF from "jspdf";
@@ -30,6 +31,10 @@ import {
 
 type ColorRow = {
   color: string;
+
+  packageId?: number;
+  libraryColorId?: number;
+  librarySearch?: string;
 
   enabled: boolean;
 
@@ -102,6 +107,8 @@ const [libraryColors,
   setSelectedPackage] =
   useState<number>(1);
 
+  
+
 useEffect(() => {
 
   
@@ -116,6 +123,7 @@ useEffect(() => {
   );
 
 }, []);
+
 
 useEffect(() => {
 
@@ -976,6 +984,8 @@ const exportPDF = async () => {
         row.targetL,
     }));
 
+
+    
   return (
     <main
   id="report-area"
@@ -1575,6 +1585,10 @@ const exportPDF = async () => {
   </th>
 
   <th className="text-left py-3">
+  Package
+</th>
+
+<th className="text-left py-3">
   Library
 </th>
 
@@ -1699,38 +1713,15 @@ const exportPDF = async () => {
 
 </td>
 <td>
-
   <select
+    value={row.packageId ?? selectedPackage}
     onChange={(e) => {
-
-      const selected =
-  libraryColors.find(
-          (c) =>
-            c.id ===
-            Number(
-              e.target.value
-            )
-        );
-
-      if (!selected) return;
-
-      const updated =
-        [...rows];
+      const updated = [...rows];
 
       updated[index] = {
         ...updated[index],
-
-        color:
-          selected.name,
-
-        targetL:
-          selected.l,
-
-        targetA:
-          selected.a,
-
-        targetB:
-          selected.b,
+        packageId: Number(e.target.value),
+        libraryColorId: undefined,
       };
 
       setRows(updated);
@@ -1744,24 +1735,70 @@ const exportPDF = async () => {
       py-2
     "
   >
+    {packages.map((pkg) => (
+      <option
+        key={pkg.id}
+        value={pkg.id}
+      >
+        {pkg.name}
+      </option>
+    ))}
+  </select>
+</td>
 
+<td>
+  <select
+    value={row.libraryColorId ?? ""}
+    onChange={(e) => {
+      const selected =
+        libraryColors.find(
+          (c) =>
+            c.id === Number(e.target.value)
+        );
+
+      if (!selected) return;
+
+      const updated = [...rows];
+
+      updated[index] = {
+        ...updated[index],
+        libraryColorId: selected.id,
+        color: selected.name,
+        targetL: selected.l,
+        targetA: selected.a,
+        targetB: selected.b,
+      };
+
+      setRows(updated);
+    }}
+    className="
+      bg-[#111827]
+      border
+      border-gray-600
+      rounded-lg
+      px-2
+      py-2
+    "
+  >
     <option value="">
       Select
     </option>
 
-    {libraryColors.map(
-      (item) => (
+    {libraryColors
+      .filter(
+        (item) =>
+          item.packageId ===
+          (row.packageId ?? selectedPackage)
+      )
+      .map((item) => (
         <option
           key={item.id}
           value={item.id}
         >
           {item.name}
         </option>
-      )
-    )}
-
+      ))}
   </select>
-
 </td>
 {/* COLOR */}
 <td className="py-3 pr-2 font-medium">
