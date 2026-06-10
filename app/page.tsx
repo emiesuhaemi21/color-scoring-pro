@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { FileText, Grid, History, Settings } from "lucide-react";
 
@@ -11,6 +12,18 @@ const menus = [
 ];
 
 export default function HomePage() {
+
+useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(() => console.log("Service Worker registered"))
+        .catch((err) =>
+          console.error("Service Worker registration failed:", err)
+        );
+    }
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#111827] text-white p-5">
 
