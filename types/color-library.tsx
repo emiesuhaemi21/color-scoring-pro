@@ -16,12 +16,14 @@ export type ColorPackage = {
 
 export type ColorEntry = {
   id: number;
-
   packageId: number;
-
   name: string;
-
   l: number;
   a: number;
   b: number;
+
+  formula?: {
+    ink: string;
+    percent: number;
+  }[];
 };

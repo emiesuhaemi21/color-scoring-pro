@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function HistoryPage() {
+
+  const pathname = usePathname();
 
   const [reports, setReports] = useState<any[]>([]);
 
@@ -24,12 +27,52 @@ export default function HistoryPage() {
   return (
     <main className="min-h-screen bg-[#111827] text-white p-5">
       {/* TOP NAVIGATION */}
-      <div className="flex flex-wrap gap-3 mb-6">
-        <a href="/" className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium">Home</a>
-        <a href="/new-report" className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium">New Report</a>
-        <a href="/history" className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium">History</a>
-        <a href="/settings" className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium">Settings</a>
-      </div>
+<div className="flex flex-wrap gap-3 mb-6">
+  <a
+    href="/"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/" ? "bg-cyan-500 border-cyan-400 text-white" : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
+  >
+    Home
+  </a>
+
+  <a
+    href="/new-report"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/new-report" ? "bg-cyan-500 border-cyan-400 text-white" : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
+  >
+    New Report
+  </a>
+
+  <a
+    href="/color-library"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/color-library" ? "bg-cyan-500 border-cyan-400 text-white" : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
+  >
+    Color Library
+  </a>
+
+  <a
+    href="/history"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/history" ? "bg-cyan-500 border-cyan-400 text-white" : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
+  >
+    History
+  </a>
+
+  <a
+    href="/settings"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/settings" ? "bg-cyan-500 border-cyan-400 text-white" : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
+  >
+    Settings
+  </a>
+</div>
 
       {/* HEADER */}
       <div className="mb-8">

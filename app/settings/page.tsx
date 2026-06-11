@@ -71,32 +71,45 @@ export default function SettingsPage() {
   return (
     <main className="min-h-screen bg-[#111827] text-white p-5">
 
-      {/* TOP NAVIGATION */}
-      <div className="flex flex-wrap gap-3 mb-6">
+     {/* TOP NAVIGATION */}
+<div className="flex flex-wrap gap-3 mb-6">
 
-        <a
-          href="/"
-          className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
-        >
-          Home
-        </a>
+  <a
+    href="/"
+    className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
+  >
+    Home
+  </a>
 
-        <a
-          href="/new-report"
-          className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
-        >
-          New Report
-        </a>
+  <a
+    href="/new-report"
+    className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
+  >
+    New Report
+  </a>
 
-        <a
-          href="/history"
-          className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
-        >
-          History
-        </a>
+  <a
+    href="/color-library"
+    className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
+  >
+    Color Library
+  </a>
 
-      </div>
+  <a
+    href="/history"
+    className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
+  >
+    History
+  </a>
 
+  <a
+    href="/settings"
+    className="bg-cyan-500 border border-cyan-400 px-4 py-3 rounded-2xl text-sm font-medium"
+  >
+    Settings
+  </a>
+
+</div>
       {/* HEADER */}
       <div className="mb-8">
 

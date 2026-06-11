@@ -1,6 +1,6 @@
 "use client";
 
-
+import { usePathname } from "next/navigation";
 import Select from "react-select";
 export const dynamic =
   "force-dynamic";
@@ -77,6 +77,7 @@ type ColorPackage = {
 
 export default function MeasurementPage() {
 
+const pathname = usePathname();
   
 
   const [editId,
@@ -106,6 +107,8 @@ const [libraryColors,
   const [selectedPackage,
   setSelectedPackage] =
   useState<number>(1);
+
+  const [selectedPackageOption, setSelectedPackageOption] = useState<any>(null);
 
   
 
@@ -997,91 +1000,64 @@ const exportPDF = async () => {
 
   <a
     href="/"
-    className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/"
+        ? "bg-cyan-500 border-cyan-400 text-white"
+        : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
   >
     Home
   </a>
 
   <a
     href="/new-report"
-    className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/new-report"
+        ? "bg-cyan-500 border-cyan-400 text-white"
+        : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
   >
     New Report
   </a>
 
   <a
+    href="/color-library"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/color-library"
+        ? "bg-cyan-500 border-cyan-400 text-white"
+        : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
+  >
+    Color Library
+  </a>
+
+  <a
     href="/history"
-    className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/history"
+        ? "bg-cyan-500 border-cyan-400 text-white"
+        : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
   >
     History
   </a>
 
   <a
     href="/settings"
-    className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/settings"
+        ? "bg-cyan-500 border-cyan-400 text-white"
+        : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
   >
     Settings
   </a>
 
-  <button
-    onClick={exportPDF}
-    className="bg-cyan-500 px-4 py-3 rounded-2xl text-sm font-medium"
-  >
-    Export PDF
-  </button>
+
 
 </div>
 <div className="bg-[#1F2937] border border-gray-700 rounded-2xl p-4 mb-5">
 
-  <div className="font-bold mb-3">
-    Color Library
-  </div>
-
-  <div className="flex gap-4">
-
-    <div>
-
-      <label className="block mb-1">
-        Package
-      </label>
-
-      <select
-        value={selectedPackage}
-        onChange={(e) =>
-          setSelectedPackage(
-            Number(
-              e.target.value
-            )
-          )
-        }
-        className="
-          bg-[#111827]
-          border
-          border-gray-600
-          rounded-lg
-          px-3
-          py-2
-        "
-      >
-
-        {packages.map(
-          (pkg) => (
-
-            <option
-              key={pkg.id}
-              value={pkg.id}
-            >
-              {pkg.name}
-            </option>
-
-          )
-        )}
-
-      </select>
-
-    </div>
-
-  </div>
 
 </div>
 
@@ -1712,38 +1688,80 @@ const exportPDF = async () => {
   />
 
 </td>
-<td>
-  <select
-    value={row.packageId ?? selectedPackage}
-    onChange={(e) => {
+<td className="w-72">
+  <Select
+    instanceId={`package-${index}`}
+    inputId={`package-input-${index}`}
+    options={packages.map((pkg) => ({
+      value: pkg.id,
+      label: pkg.name,
+    }))}
+    value={
+      packages
+        .map((pkg) => ({
+          value: pkg.id,
+          label: pkg.name,
+        }))
+        .find(
+          (option) =>
+            option.value ===
+            (row.packageId ?? selectedPackage)
+        ) || null
+    }
+    onChange={(option: any) => {
+      if (!option) return;
+
       const updated = [...rows];
 
       updated[index] = {
         ...updated[index],
-        packageId: Number(e.target.value),
+        packageId: option.value,
         libraryColorId: undefined,
       };
 
       setRows(updated);
     }}
-    className="
-      bg-[#111827]
-      border
-      border-gray-600
-      rounded-lg
-      px-2
-      py-2
-    "
-  >
-    {packages.map((pkg) => (
-      <option
-        key={pkg.id}
-        value={pkg.id}
-      >
-        {pkg.name}
-      </option>
-    ))}
-  </select>
+    placeholder="Search package..."
+    isClearable
+    filterOption={(option, inputValue) =>
+      option.label
+        .toLowerCase()
+        .includes(inputValue.toLowerCase())
+    }
+    styles={{
+      control: (base) => ({
+        ...base,
+        backgroundColor: "#111827",
+        borderColor: "#4B5563",
+        borderRadius: "0.5rem",
+        minHeight: "42px",
+      }),
+      singleValue: (base) => ({
+        ...base,
+        color: "#F9FAFB",
+      }),
+      input: (base) => ({
+        ...base,
+        color: "#F9FAFB",
+      }),
+      placeholder: (base) => ({
+        ...base,
+        color: "#9CA3AF",
+      }),
+      menu: (base) => ({
+        ...base,
+        backgroundColor: "#111827",
+        zIndex: 9999,
+      }),
+      option: (base, state) => ({
+        ...base,
+        backgroundColor: state.isFocused
+          ? "#374151"
+          : "#111827",
+        color: "#F9FAFB",
+      }),
+    }}
+  />
 </td>
 
 <td>
