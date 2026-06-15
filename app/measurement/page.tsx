@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+
 import { usePathname } from "next/navigation";
 import Select from "react-select";
 export const dynamic =
@@ -77,11 +77,7 @@ type ColorPackage = {
 };
 
 export default function MeasurementPage() {
-
-const searchParams = useSearchParams();
-
-const copyId = searchParams?.get("copy");
-
+const [copyId, setCopyId] = useState("");
 const pathname = usePathname();
   
 
@@ -115,6 +111,24 @@ const [libraryColors,
 
   const [selectedPackageOption, setSelectedPackageOption] = useState<any>(null);
 
+
+useEffect(() => {
+
+const params =
+
+new URLSearchParams(
+
+window.location.search
+
+);
+
+setCopyId(
+
+params.get("copy") || ""
+
+);
+
+}, []);
 
 useEffect(() => {
 
