@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 import Select from "react-select";
 export const dynamic =
@@ -77,6 +78,10 @@ type ColorPackage = {
 
 export default function MeasurementPage() {
 
+const searchParams = useSearchParams();
+
+const copyId = searchParams?.get("copy");
+
 const pathname = usePathname();
   
 
@@ -110,6 +115,68 @@ const [libraryColors,
 
   const [selectedPackageOption, setSelectedPackageOption] = useState<any>(null);
 
+
+useEffect(() => {
+
+if (!copyId) return;
+
+const stored =
+localStorage.getItem(
+"color-scoring-reports"
+);
+
+if (!stored) return;
+
+const reports =
+JSON.parse(stored);
+
+const source =
+reports.find(
+(r:any)=>
+r.id === Number(copyId)
+);
+
+if (!source) return;
+
+
+// copy job information
+
+setJobInfo({
+
+...source.jobInfo,
+
+rollNo:
+String(
+Number(
+source.rollNo || 0
+)+1
+),
+
+});
+
+
+// copy color rows
+
+setRows(
+
+source.rows.map(
+(row:any)=>({
+
+...row,
+
+measureL: "",
+
+measureA: "",
+
+measureB: "",
+
+})
+
+)
+
+);
+
+},[copyId]);
   
 
 useEffect(() => {
@@ -270,31 +337,53 @@ const [opacity, setOpacity] =
 
 // JOB INFORMATION
 const [jobInfo, setJobInfo] = useState({
+
   jobName: "",
+
   customer: "",
+
+  item: "",
+
+  rollNo: "",
+
   operator: "",
+
   machine: "",
+
   shift: "",
 
   substrateType: "",
+
   substrateColor: "",
+
   thickness: "",
+
   width: "",
 
   inkSupplier: "",
+
   inkType: "",
+
   inkSeries: "",
+
   inkBatch: "",
 
   plateSupplier: "",
+
   plateSpecs: "",
+
   plateThickness: "",
+
   plateLine: "",
+
   plateSleeve: "",
 
   machineName: "",
+
   speed: "",
+
   printingType: "",
+
 });
 useEffect(() => {
 
@@ -811,28 +900,36 @@ const updateValue = (
   const saveReport = () => {
 
     const report = {
-  id: editingId || Date.now(),
 
-  reportName,
+ id: editingId || Date.now(),
 
-  date:
-    new Date().toLocaleString(),
+ reportName,
 
-  totalScore,
+ createdAt:
+ new Date().toISOString(),
 
-  deltaMode,
+ totalScore,
 
-  jobInfo,
+ deltaMode,
 
-  customer,
-  article,
-  supplierPlate,
-  operator,
-  machine,
-  jobNumber,
+ jobInfo,
 
-  condition,
-  opacity,
+ customer:
+ jobInfo.customer,
+
+ item:
+ jobInfo.item,
+
+ rollNo:
+ jobInfo.rollNo,
+
+ article,
+ supplierPlate,
+ operator,
+ machine,
+ jobNumber,
+ condition,
+ opacity,
 
   rows: activeRows.map((row) => ({
     ...row,
@@ -1176,67 +1273,91 @@ const exportPDF = async () => {
 
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-    <input
-      placeholder="Job Name"
-      value={jobInfo.jobName}
-      onChange={(e) =>
-        setJobInfo({
-          ...jobInfo,
-          jobName: e.target.value,
-        })
-      }
-      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
-    />
+  <input
+    placeholder="Customer"
+    value={jobInfo.customer}
+    onChange={(e)=>
+      setJobInfo({
+        ...jobInfo,
+        customer:e.target.value
+      })
+    }
+    className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+  />
 
-    <input
-      placeholder="Customer"
-      value={jobInfo.customer}
-      onChange={(e) =>
-        setJobInfo({
-          ...jobInfo,
-          customer: e.target.value,
-        })
-      }
-      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
-    />
+  <input
+    placeholder="Item"
+    value={jobInfo.item}
+    onChange={(e)=>
+      setJobInfo({
+        ...jobInfo,
+        item:e.target.value
+      })
+    }
+    className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+  />
 
-    <input
-      placeholder="Operator"
-      value={jobInfo.operator}
-      onChange={(e) =>
-        setJobInfo({
-          ...jobInfo,
-          operator: e.target.value,
-        })
-      }
-      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
-    />
+  <input
+    placeholder="Roll Number"
+    value={jobInfo.rollNo}
+    onChange={(e)=>
+      setJobInfo({
+        ...jobInfo,
+        rollNo:e.target.value
+      })
+    }
+    className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+  />
 
-    <input
-      placeholder="Machine"
-      value={jobInfo.machine}
-      onChange={(e) =>
-        setJobInfo({
-          ...jobInfo,
-          machine: e.target.value,
-        })
-      }
-      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
-    />
+  <input
+    placeholder="Operator"
+    value={jobInfo.operator}
+    onChange={(e)=>
+      setJobInfo({
+        ...jobInfo,
+        operator:e.target.value
+      })
+    }
+    className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+  />
 
-    <input
-      placeholder="Shift"
-      value={jobInfo.shift}
-      onChange={(e) =>
-        setJobInfo({
-          ...jobInfo,
-          shift: e.target.value,
-        })
-      }
-      className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
-    />
+  <input
+    placeholder="Shift"
+    value={jobInfo.shift}
+    onChange={(e)=>
+      setJobInfo({
+        ...jobInfo,
+        shift:e.target.value
+      })
+    }
+    className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+  />
 
-  </div>
+  <input
+    placeholder="Job Name"
+    value={jobInfo.jobName}
+    onChange={(e)=>
+      setJobInfo({
+        ...jobInfo,
+        jobName:e.target.value
+      })
+    }
+    className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+  />
+
+  <input
+    placeholder="Machine"
+    value={jobInfo.machine}
+    onChange={(e)=>
+      setJobInfo({
+        ...jobInfo,
+        machine:e.target.value
+      })
+    }
+    className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
+  />
+
+</div>
 
 
 </div>
