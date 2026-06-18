@@ -1,5 +1,8 @@
 "use client";
 
+
+
+import {Search,Users,Calendar,Star,Upload,Download} from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -10,12 +13,78 @@ const pathname = usePathname();
 const [reports,setReports] =
 useState<any[]>([]);
 
+
 const [openMenu,
 setOpenMenu] =
 useState<number | null>(null);
 
 
+const [favorites,
+setFavorites] =
+useState<number[]>([]);
+
+const [favoriteOnly,
+setFavoriteOnly] =
+useState(false);
+
+const [showFavorite,
+setShowFavorite] =
+useState(false);
+
+const [showExport,
+setShowExport] =
+useState(false);
+
+const [showImport,
+setShowImport] =
+useState(false);
+
+const [showSearch,setShowSearch] =
+useState(false);
+
+const [showCustomer,setShowCustomer] =
+useState(false);
+
+const [showDate,setShowDate] =
+useState(false);
+
+const [search,setSearch] =
+useState("");
+
+const [customerFilter,
+setCustomerFilter] =
+useState("all");
+
+const [dateFilter,
+setDateFilter] =
+useState("");
+
+
 // LOAD REPORT
+
+
+
+useEffect(()=>{
+
+const stored =
+
+localStorage.getItem(
+
+"favorite-reports"
+
+);
+
+if(stored){
+
+setFavorites(
+
+JSON.parse(stored)
+
+);
+
+}
+
+},[]);
 
 useEffect(()=>{
 
@@ -74,11 +143,117 @@ report.date,
 
 }));
 
+const customers = [
+
+"all",
+
+...new Set(
+
+normalizedReports.map(
+
+r => r.customer
+
+)
+
+)
+
+];
+
+const filteredReports =
+
+normalizedReports.filter(
+
+report => {
+
+const matchFavorite =
+
+!favoriteOnly
+
+||
+
+favorites.includes(
+report.id
+);    
+
+const matchSearch =
+
+search === ""
+
+||
+
+report.item
+
+.toLowerCase()
+
+.includes(
+
+search.toLowerCase()
+
+)
+
+||
+
+report.customer
+
+.toLowerCase()
+
+.includes(
+
+search.toLowerCase()
+
+);
+
+const matchCustomer =
+
+customerFilter === "all"
+
+||
+
+report.customer ===
+
+customerFilter;
+
+const matchDate =
+
+dateFilter === ""
+
+||
+
+new Date(
+
+report.createdAt
+
+)
+
+.toISOString()
+
+.slice(0,10)
+
+=== dateFilter;
+
+return (
+
+matchSearch
+
+&&
+
+matchCustomer
+
+&&
+
+matchDate
+
+);
+
+}
+
+);
+
 
 // GROUP CUSTOMER
 
 const groupedReports =
-normalizedReports.reduce(
+filteredReports.reduce(
 
 (acc,report)=>{
 
@@ -116,6 +291,40 @@ Record<string,any[]>
 
 
 // DELETE
+
+const toggleFavorite =
+
+(id:number)=>{
+
+const updated =
+
+favorites.includes(id)
+
+? favorites.filter(
+
+f => f !== id
+
+)
+
+: [
+
+...favorites,
+
+id
+
+];
+
+setFavorites(updated);
+
+localStorage.setItem(
+
+"favorite-reports",
+
+JSON.stringify(updated)
+
+);
+
+};
 
 const deleteReport = (
 id:number
@@ -239,7 +448,7 @@ rounded-2xl
 
 >
 
-History
+My Report
 
 </a>
 
@@ -267,6 +476,7 @@ Settings
 
 {/* HEADER */}
 
+
 <div className="mb-8">
 
 <h1 className="
@@ -274,7 +484,7 @@ text-4xl
 font-bold
 ">
 
-History
+My Report
 
 </h1>
 
@@ -283,7 +493,7 @@ text-gray-400
 mt-2
 ">
 
-Saved QC Reports
+My saved reports
 
 </p>
 
@@ -307,6 +517,280 @@ No Saved Reports
 
 )}
 
+{/* TOOLBAR */}
+
+<div className="
+flex
+gap-3
+mb-6
+flex-wrap
+">
+
+<button
+
+onClick={()=>
+
+setShowSearch(
+!showSearch
+)
+
+}
+
+className="
+bg-[#1F2937]
+p-3
+rounded-xl
+"
+
+>
+
+<Search size={18}/>
+
+</button>
+
+
+<button
+
+onClick={()=>
+
+setShowCustomer(
+!showCustomer
+)
+
+}
+
+className="
+bg-[#1F2937]
+p-3
+rounded-xl
+"
+
+>
+
+<Users size={18}/>
+
+</button>
+
+
+<button
+
+onClick={()=>
+
+setShowDate(
+!showDate
+)
+
+}
+
+className="
+bg-[#1F2937]
+p-3
+rounded-xl
+"
+
+>
+
+<Calendar size={18}/>
+
+</button>
+
+<button
+
+onClick={()=>
+
+setFavoriteOnly(
+!favoriteOnly
+)
+
+}
+
+className={`
+p-3
+rounded-xl
+
+${
+favoriteOnly
+
+? "bg-yellow-500"
+
+: "bg-[#1F2937]"
+}
+
+`}
+
+>
+
+<Star size={18}/>
+
+</button>
+
+<button
+
+onClick={()=>
+
+setShowExport(
+!showExport
+)
+
+}
+
+className="
+bg-[#1F2937]
+p-3
+rounded-xl
+"
+
+>
+
+<Download size={18}/>
+
+</button>
+
+
+<button
+
+onClick={()=>
+
+setShowImport(
+!showImport
+)
+
+}
+
+className="
+bg-[#1F2937]
+p-3
+rounded-xl
+"
+
+>
+
+<Upload size={18}/>
+
+</button>
+
+</div>
+
+{/* SEARCH */}
+
+{showSearch && (
+
+<input
+
+type="text"
+
+placeholder="🔍 Search customer atau item"
+
+value={search}
+
+onChange={(e)=>
+
+setSearch(
+e.target.value
+)
+
+}
+
+className="
+w-full
+mb-4
+bg-[#1F2937]
+border
+border-gray-700
+p-3
+rounded-xl
+outline-none
+"
+
+/>
+
+)}
+
+
+{/* CUSTOMER */}
+
+{showCustomer && (
+
+<select
+
+value={customerFilter}
+
+onChange={(e)=>
+
+setCustomerFilter(
+e.target.value
+)
+
+}
+
+className="
+w-full
+mb-4
+bg-[#1F2937]
+border
+border-gray-700
+p-3
+rounded-xl
+"
+
+>
+
+{customers.map(
+
+customer=>(
+
+<option
+
+key={customer}
+
+value={customer}
+
+>
+
+{customer}
+
+</option>
+
+)
+
+)}
+
+</select>
+
+)}
+
+
+{/* DATE */}
+
+{showDate && (
+
+<input
+
+type="date"
+
+value={dateFilter}
+
+onChange={(e)=>
+
+setDateFilter(
+e.target.value
+)
+
+}
+
+className="
+w-full
+mb-6
+bg-[#1F2937]
+border
+border-gray-700
+p-3
+rounded-xl
+"
+
+/>
+
+)}
 
 {/* CUSTOMER */}
 
@@ -405,6 +889,42 @@ flex
 items-center
 gap-6
 ">
+
+<button
+
+onClick={()=>
+
+toggleFavorite(
+report.id
+)
+
+}
+
+className="
+text-yellow-400
+"
+
+>
+
+<Star
+
+size={18}
+
+fill={
+
+favorites.includes(
+report.id
+)
+
+? "currentColor"
+
+: "none"
+
+}
+
+/>
+
+</button>
 
 <div>
 

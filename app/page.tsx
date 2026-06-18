@@ -7,7 +7,7 @@ import { FileText, Grid, History, Settings } from "lucide-react";
 const menus = [
   { title: "New Report", icon: FileText, link: "/new-report" },
   { title: "Color Library", icon: Grid, link: "/color-library" }, // tetap seperti ini
-  { title: "History", icon: History, link: "/history" },
+  { title: "My Report", icon: History, link: "/history" },
   { title: "Settings", icon: Settings, link: "/settings" },
 ];
 

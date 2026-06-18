@@ -53,7 +53,7 @@ export default function NewReportPage() {
               : "bg-[#1F2937] border-gray-700 text-white"
           }`}
         >
-          History
+          My Report
         </a>
 
         <a

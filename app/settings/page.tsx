@@ -99,7 +99,7 @@ export default function SettingsPage() {
     href="/history"
     className="bg-[#1F2937] border border-gray-700 px-4 py-3 rounded-2xl text-sm font-medium"
   >
-    History
+    My Report
   </a>
 
   <a
