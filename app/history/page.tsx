@@ -31,10 +31,6 @@ const [showFavorite,
 setShowFavorite] =
 useState(false);
 
-const [showExport,
-setShowExport] =
-useState(false);
-
 const [showImport,
 setShowImport] =
 useState(false);
@@ -289,6 +285,220 @@ Record<string,any[]>
 
 );
 
+const importReport = (
+e:any
+)=>{
+
+const file =
+
+e.target.files?.[0];
+
+if(!file) return;
+
+const reader =
+
+new FileReader();
+
+reader.onload =
+
+(event)=>{
+
+try{
+
+const imported = JSON.parse(
+  String(event.target?.result)
+);
+
+// validasi file
+
+if(
+
+imported.fileType !==
+
+"ColorScoringReport"
+
+){
+
+alert(
+
+"Invalid CSR file"
+
+);
+
+return;
+
+}
+
+const newReport =
+
+imported.report;
+
+
+// ambil report yang ada
+
+const currentReports =
+
+JSON.parse(
+
+localStorage.getItem(
+
+"color-scoring-reports"
+
+)
+
+||
+
+"[]"
+
+);
+
+
+// cek duplikat id
+
+const duplicate =
+
+currentReports.some(
+
+(r:any)=>
+
+r.id === newReport.id
+
+);
+
+if(duplicate){
+
+alert(
+
+"Report already exists"
+
+);
+
+return;
+
+}
+
+
+const updated = [
+
+...currentReports,
+
+newReport
+
+];
+
+
+// simpan
+
+localStorage.setItem(
+
+"color-scoring-reports",
+
+JSON.stringify(
+updated
+)
+
+);
+
+
+// refresh halaman
+
+setReports(
+updated
+);
+
+alert(
+
+"Import success"
+
+);
+
+}catch{
+
+alert(
+
+"File CSR tidak valid"
+
+);
+
+}
+
+};
+
+reader.readAsText(
+file
+);
+
+};
+
+const exportReport = (report:any) => {
+
+const exportData = {
+
+fileType:
+"ColorScoringReport",
+
+version:
+"1.0",
+
+exportedAt:
+new Date().toISOString(),
+
+report
+
+};
+
+const blob =
+
+new Blob(
+
+[
+
+JSON.stringify(
+
+exportData,
+
+null,
+
+2
+
+)
+
+],
+
+{
+
+type:
+"application/json"
+
+}
+
+);
+
+const url =
+
+URL.createObjectURL(
+blob
+);
+
+const a =
+
+document.createElement(
+"a"
+);
+
+a.href = url;
+
+a.download =
+
+`${report.customer}_${report.item}_${report.rollNo}.csr`;
+
+a.click();
+
+URL.revokeObjectURL(
+url
+);
+
+};
 
 // DELETE
 
@@ -352,6 +562,7 @@ filtered
 
 
 return(
+
 
 <main className="
 min-h-screen
@@ -563,7 +774,10 @@ className="
 bg-[#1F2937]
 p-3
 rounded-xl
+cursor-pointer
 "
+
+title="Search item Report"
 
 >
 
@@ -586,7 +800,10 @@ className="
 bg-[#1F2937]
 p-3
 rounded-xl
+cursor-pointer
 "
+
+title="Search Date Report"
 
 >
 
@@ -608,6 +825,7 @@ className={`
 p-3
 rounded-xl
 
+
 ${
 favoriteOnly
 
@@ -624,50 +842,35 @@ favoriteOnly
 
 </button>
 
-<button
 
-onClick={()=>
-
-setShowExport(
-!showExport
-)
-
-}
+<label
 
 className="
 bg-[#1F2937]
 p-3
 rounded-xl
+cursor-pointer
 "
 
->
-
-<Download size={18}/>
-
-</button>
-
-
-<button
-
-onClick={()=>
-
-setShowImport(
-!showImport
-)
-
-}
-
-className="
-bg-[#1F2937]
-p-3
-rounded-xl
-"
+title="Import Report"
 
 >
 
 <Upload size={18}/>
 
-</button>
+<input
+
+type="file"
+
+accept=".csr"
+
+hidden
+
+onChange={importReport}
+
+/>
+
+</label>
 
 </div>
 
@@ -1111,6 +1314,33 @@ hover:bg-gray-700
 >
 
 Edit
+
+</button>
+<button
+
+onClick={()=>{
+
+exportReport(
+report
+);
+
+setOpenMenu(
+null
+);
+
+}}
+
+className="
+w-full
+text-left
+px-4
+py-2
+hover:bg-gray-700
+"
+
+>
+
+Export Report
 
 </button>
 
