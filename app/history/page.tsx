@@ -646,6 +646,25 @@ Color Library
 
 <a
 
+href="/customer"
+
+className="
+bg-[#1F2937]
+border
+border-gray-700
+px-4
+py-3
+rounded-2xl
+"
+
+>
+
+Customer
+
+</a>
+
+<a
+
 href="/history"
 
 className="

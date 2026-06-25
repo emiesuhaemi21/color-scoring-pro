@@ -399,6 +399,17 @@ const [jobInfo, setJobInfo] = useState({
   printingType: "",
 
 });
+const [customers, setCustomers] = useState<any[]>([]);
+useEffect(() => {
+  const savedCustomers =
+    localStorage.getItem("customers");
+
+  if (savedCustomers) {
+    setCustomers(
+      JSON.parse(savedCustomers)
+    );
+  }
+}, []);
 useEffect(() => {
 
   if (!editId) return;
@@ -1143,6 +1154,17 @@ const exportPDF = async () => {
   </a>
 
   <a
+    href="/customer"
+    className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+      pathname === "/customer"
+        ? "bg-cyan-500 border-cyan-400 text-white"
+        : "bg-[#1F2937] border-gray-700 text-white"
+    }`}
+  >
+    Customer
+  </a>
+
+  <a
     href="/history"
     className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
       pathname === "/history"
@@ -1287,17 +1309,38 @@ const exportPDF = async () => {
 
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-  <input
-    placeholder="Customer"
-    value={jobInfo.customer}
-    onChange={(e)=>
-      setJobInfo({
-        ...jobInfo,
-        customer:e.target.value
-      })
-    }
-    className="bg-[#111827] border border-gray-600 rounded-xl px-4 py-3"
-  />
+  <select
+  value={jobInfo.customer}
+  onChange={(e)=>
+    setJobInfo({
+      ...jobInfo,
+      customer:e.target.value
+    })
+  }
+  className="
+    bg-[#111827]
+    border
+    border-gray-600
+    rounded-xl
+    px-4
+    py-3
+  "
+>
+
+  <option value="">
+    Select Customer
+  </option>
+
+  {customers.map((customer) => (
+    <option
+      key={customer.id}
+      value={customer.name}
+    >
+      {customer.code} - {customer.name}
+    </option>
+  ))}
+
+</select>
 
   <input
     placeholder="Item"

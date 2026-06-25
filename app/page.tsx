@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { FileText, Grid, History, Settings } from "lucide-react";
+import { FileText, Grid, History, Settings, Users } from "lucide-react";
 
 const menus = [
   { title: "New Report", icon: FileText, link: "/new-report" },
   { title: "Color Library", icon: Grid, link: "/color-library" }, // tetap seperti ini
   { title: "My Report", icon: History, link: "/history" },
+  { title: "Customer", icon: Users, link: "/customer" },
   { title: "Settings", icon: Settings, link: "/settings" },
 ];
 

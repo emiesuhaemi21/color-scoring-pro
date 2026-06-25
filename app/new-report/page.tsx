@@ -46,6 +46,17 @@ export default function NewReportPage() {
         </a>
 
         <a
+          href="/customer"
+          className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+            pathname === "/customer"
+              ? "bg-cyan-500 border-cyan-400 text-white"
+              : "bg-[#1F2937] border-gray-700 text-white"
+          }`}
+        >
+          Customer
+        </a>
+
+        <a
           href="/history"
           className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
             pathname === "/history"
