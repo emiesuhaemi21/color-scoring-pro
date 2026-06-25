@@ -1675,22 +1675,8 @@ const exportPDF = async () => {
       </div>
 
       {/* TABLE */}
-<<<<<<< HEAD
-      <div
-className="
-bg-[#1F2937]
-rounded-3xl
-p-5
-border
-border-gray-700
-overflow-x-auto
-touch-pan-x
-"
->
-=======
       <div className="bg-[#1F2937] rounded-3xl p-5 border border-gray-700 overflow-x-auto">
 
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
         <h2 className="text-lg font-semibold mb-4">
           Measurement Table
         </h2>
@@ -1705,19 +1691,11 @@ touch-pan-x
     Deck No.
   </th>
 
-<<<<<<< HEAD
-  <th className="text-left py-3 w-16">
-  Review
-</th>
-
-<th className="text-left py-3 min-w-[180px]">
-=======
   <th className="text-left py-3">
     Review
   </th>
 
   <th className="text-left py-3">
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
   Package
 </th>
 
@@ -1845,10 +1823,6 @@ touch-pan-x
   />
 
 </td>
-<<<<<<< HEAD
-
-=======
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
 <td className="w-72">
   <Select
     instanceId={`package-${index}`}
@@ -1883,11 +1857,7 @@ touch-pan-x
       setRows(updated);
     }}
     placeholder="Search package..."
-<<<<<<< HEAD
-    isClearable={false}
-=======
     isClearable
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
     filterOption={(option, inputValue) =>
       option.label
         .toLowerCase()
@@ -1929,11 +1899,7 @@ touch-pan-x
   />
 </td>
 
-<<<<<<< HEAD
-<td className="w-72">
-=======
 <td>
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
   <select
     value={row.libraryColorId ?? ""}
     onChange={(e) => {
@@ -1959,18 +1925,6 @@ touch-pan-x
       setRows(updated);
     }}
     className="
-<<<<<<< HEAD
-w-full
-min-w-[160px]
-bg-[#111827]
-border
-border-gray-600
-rounded-lg
-px-3
-py-3
-text-sm
-"
-=======
       bg-[#111827]
       border
       border-gray-600
@@ -1978,7 +1932,6 @@ text-sm
       px-2
       py-2
     "
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
   >
     <option value="">
       Select

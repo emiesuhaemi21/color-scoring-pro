@@ -1,10 +1,7 @@
 "use client";
 
-<<<<<<< HEAD
 
 import { MoreVertical } from "lucide-react";
-=======
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
 import { useEffect, useState } from "react";
 import { ColorPackage, ColorEntry, LibraryType } from "@/types/color-library";
 
@@ -372,17 +369,11 @@ ${xmlColors}
 
   URL.revokeObjectURL(url);
 };
-<<<<<<< HEAD
 
 const [openPackageMenu, setOpenPackageMenu] =
 useState<number | null>(null);
-
 const [openColorMenu, setOpenColorMenu] =
 useState<number | null>(null);
-
-
-=======
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
   return (
     <main className="min-h-screen bg-[#111827] text-white p-5">
       <div className="flex flex-wrap gap-3 mb-8">
@@ -467,9 +458,7 @@ useState<number | null>(null);
                 <div className="text-cyan-400 text-sm mt-1">{pkg.type}</div>
                 <p className="text-gray-400 mt-1">{pkg.description}</p>
               </div>
-              <div className="flex gap-2">
-<<<<<<< HEAD
-                <div className="relative">
+              <div className="relative">
 
 <button
 
@@ -592,22 +581,6 @@ Delete
 )}
 
 </div>
-=======
-                <button onClick={() => {
-                  setEditingPackageId(pkg.id);
-                  setEditPackageName(pkg.name);
-                  setEditPackageType(pkg.type);
-                }} className="bg-yellow-500 hover:bg-yellow-400 text-white px-3 py-2 rounded-xl text-sm font-bold">
-                  Edit
-                </button>
-                <button onClick={() => {
-                  setPackages(packages.filter((p) => p.id !== pkg.id));
-                  setColors(colors.filter((c) => c.packageId !== pkg.id));
-                }} className="bg-red-500 hover:bg-red-400 text-white px-3 py-2 rounded-xl text-sm font-bold">
-                  Delete
-                </button>
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
-              </div>
             </div>
 
             {editingPackageId === pkg.id && (
@@ -849,7 +822,6 @@ Delete
         </div>
 
         <div className="flex gap-2 items-center">
-<<<<<<< HEAD
 
 <div
 className="w-12 h-12 rounded-xl border border-gray-500"
@@ -996,33 +968,6 @@ hover:bg-gray-700
 </div>
 
 </div>
-=======
-          <div
-            className="w-12 h-12 rounded-xl border border-gray-500"
-            style={{ backgroundColor: `rgb(${r},${g},${b_})` }}
-          />
-          <button
-            onClick={() => startEditColor(color)}
-            className="bg-yellow-500 hover:bg-yellow-400 text-white px-3 py-2 rounded-xl text-sm font-bold"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => deleteColor(color.id)}
-            className="bg-red-500 hover:bg-red-400 text-white px-3 py-2 rounded-xl text-sm font-bold"
-          >
-            Delete
-          </button>
-          <button
-            onClick={() =>
-              setShowFormulaId(showFormulaId === color.id ? null : color.id)
-            }
-            className="bg-cyan-500 hover:bg-cyan-400 text-white px-3 py-2 rounded-xl text-sm font-bold"
-          >
-            {showFormulaId === color.id ? "Hide Formula" : "View Formula"}
-          </button>
-        </div>
->>>>>>> 0298d214bdc3e9dd8bcf217292e558f3ab8687ab
       </div>
 
       {showFormulaId === color.id && (
