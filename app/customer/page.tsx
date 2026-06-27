@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MoreVertical } from "lucide-react";
+import { CustomerItem } from "@/types/customer-item";
 
 type Customer = {
   id: number;
@@ -10,44 +11,99 @@ type Customer = {
 };
 
 export default function CustomerPage() {
+  // =========================
+  // Customer State
+  // =========================
+
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [loaded, setLoaded] = useState(false);
-  const [search, setSearch] = useState("");
-  const [editingId, setEditingId] =
+  const [selectedCustomer, setSelectedCustomer] =
   useState<number | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
-const [editCode, setEditCode] =
-  useState("");
+  const [search, setSearch] = useState("");
 
-const [editName, setEditName] =
-  useState("");
   const [showAdd, setShowAdd] = useState(false);
 
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
 
-  const [openMenu, setOpenMenu] =
-  useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editCode, setEditCode] = useState("");
+  const [editName, setEditName] = useState("");
 
-useEffect(() => {
-  const saved =
-    localStorage.getItem("customers");
+  const [openMenu, setOpenMenu] = useState<number | null>(null);
 
-  if (saved) {
-    setCustomers(JSON.parse(saved));
-  }
+  // =========================
+  // Item State
+  // =========================
 
-  setLoaded(true);
-}, []);
+  const [items, setItems] = useState<CustomerItem[]>([]);
 
-useEffect(() => {
-  if (!loaded) return;
+  const [showItemsCustomerId, setShowItemsCustomerId] =
+    useState<number | null>(null);
 
-  localStorage.setItem(
-    "customers",
-    JSON.stringify(customers)
-  );
-}, [customers, loaded]);
+  const [showAddItem, setShowAddItem] = useState(false);
+
+  const [itemCode, setItemCode] = useState("");
+  const [itemName, setItemName] = useState("");
+  const [itemDescription, setItemDescription] = useState("");
+
+  const [editingItemId, setEditingItemId] =
+    useState<number | null>(null);
+  const [editItemCode, setEditItemCode] = useState("");
+  const [editItemName, setEditItemName] = useState("");
+  const [editItemDescription, setEditItemDescription] = useState("");
+
+  const [openItemMenu, setOpenItemMenu] =
+    useState<number | null>(null);
+
+  const [searchItem, setSearchItem] = useState("");
+
+  // =========================
+  // Customer Storage
+  // =========================
+
+  useEffect(() => {
+    const saved = localStorage.getItem("customers");
+
+    if (saved) {
+      setCustomers(JSON.parse(saved));
+    }
+
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+
+    localStorage.setItem(
+      "customers",
+      JSON.stringify(customers)
+    );
+  }, [customers, loaded]);
+
+  // =========================
+  // Item Storage
+  // =========================
+
+  useEffect(() => {
+    const saved = localStorage.getItem("customer-items");
+
+    if (saved) {
+      setItems(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "customer-items",
+      JSON.stringify(items)
+    );
+  }, [items]);
+
+  // =========================
+  // Customer Functions
+  // =========================
 
   const addCustomer = () => {
     if (!code || !name) return;
@@ -68,31 +124,88 @@ useEffect(() => {
 
   const deleteCustomer = (id: number) => {
     setCustomers(
-      customers.filter(
-        (c) => c.id !== id
-      )
+      customers.filter((c) => c.id !== id)
     );
   };
-  const saveEditCustomer = () => {
-  if (editingId === null) return;
 
-  setCustomers(
-    customers.map((customer) =>
-      customer.id === editingId
+  const saveEditCustomer = () => {
+    if (editingId === null) return;
+
+    setCustomers(
+      customers.map((customer) =>
+        customer.id === editingId
+          ? {
+              ...customer,
+              code: editCode,
+              name: editName,
+            }
+          : customer
+      )
+    );
+
+    setEditingId(null);
+    setEditCode("");
+    setEditName("");
+  };
+// =========================
+// Item Functions
+// =========================
+
+const addItem = () => {
+  if (
+    selectedCustomer === null ||
+    !itemCode ||
+    !itemName
+  )
+    return;
+
+  setItems([
+    ...items,
+    {
+      id: Date.now(),
+      customerId: selectedCustomer,
+      code: itemCode,
+      name: itemName,
+      description: itemDescription,
+    },
+  ]);
+
+  setItemCode("");
+  setItemName("");
+  setItemDescription("");
+  setShowAddItem(false);
+};
+
+const deleteItem = (id: number) => {
+  if (!confirm("Delete this item?")) return;
+
+  setItems(
+    items.filter((item) => item.id !== id)
+  );
+};
+
+const saveEditItem = () => {
+  if (editingItemId === null) return;
+
+  setItems(
+    items.map((item) =>
+      item.id === editingItemId
         ? {
-            ...customer,
-            code: editCode,
-            name: editName,
+            ...item,
+            code: editItemCode,
+            name: editItemName,
+            description: editItemDescription,
           }
-        : customer
+        : item
     )
   );
 
-  setEditingId(null);
-  setEditCode("");
-  setEditName("");
-};
+  setEditingItemId(null);
 
+  setEditItemCode("");
+  setEditItemName("");
+  setEditItemDescription("");
+};
   return (
     <main className="min-h-screen bg-[#111827] text-white p-5">
       <div className="flex flex-wrap gap-3 mb-8">
@@ -144,19 +257,7 @@ useEffect(() => {
         Customer Database
       </h1>
 
-      <button
-        onClick={() => setShowAdd(true)}
-        className="
-        bg-cyan-500
-        px-4
-        py-3
-        rounded-2xl
-        font-bold
-        mb-5
-        "
-      >
-        + New Customer
-      </button>
+      <button onClick={() => setShowAdd(true)}className="bg-cyan-500 px-4 py-3 rounded-2xl font-bold mb-5 " > + New Customer</button>
 
       {showAdd && (
         <div
@@ -264,15 +365,20 @@ useEffect(() => {
   .map((customer) => (
 
           <div
-            key={customer.id}
-            className="
-            bg-[#1F2937]
-            border
-            border-gray-700
-            rounded-3xl
-            p-5
-            "
-          >
+  key={customer.id}
+  onClick={() => setSelectedCustomer(customer.id)}
+  className={`
+    rounded-3xl
+    p-5
+    border
+    cursor-pointer
+    ${
+      selectedCustomer === customer.id
+        ? "border-cyan-500 bg-[#243244]"
+        : "border-gray-700 bg-[#1F2937]"
+    }
+  `}
+>
 
             <div className="flex justify-between">
               {editingId === customer.id && (
@@ -380,7 +486,6 @@ useEffect(() => {
                 >
                   <MoreVertical />
                 </button>
-
                 {openMenu === customer.id && (
 
                   <div
@@ -396,23 +501,7 @@ useEffect(() => {
                     overflow-hidden
                     "
                   >
-
-                    <button
-                      onClick={() =>
-                        deleteCustomer(
-                          customer.id
-                        )
-                      }
-                      className="
-                      w-full
-                      p-3
-                      text-left
-                      text-red-400
-                      "
-                    >
-                      Delete
-                    </button>
-                    <button
+                      <button
                         onClick={() => {
                         setEditingId(customer.id);
                         setEditCode(customer.code);
@@ -428,18 +517,330 @@ useEffect(() => {
                     >
                       Edit
                     </button>
-
+                    
+                    <button
+                      onClick={() =>
+                        deleteCustomer(
+                          customer.id
+                        )
+                      }
+                      className="
+                      w-full
+                      p-3
+                      text-left
+                      text-red-400
+                      "
+                    >
+                      Delete
+                    </button>
+                    
                   </div>
 
                 )}
 
               </div>
+              
 
             </div>
+            
 
           </div>
 
-        ))}
+               ))}
+
+      </div>
+
+      <div
+        className="
+          mt-8
+          bg-[#1F2937]
+          border
+          border-gray-700
+          rounded-3xl
+          p-5
+        "
+      >
+        <div className="flex justify-between items-center mb-4">
+
+          <div>
+            <h2 className="text-xl font-bold">
+              Items
+            </h2>
+
+            <p className="text-sm text-gray-400 mt-1">
+              Customer :
+              {" "}
+              {
+                customers.find(
+                  (c) => c.id === selectedCustomer
+                )?.name || "-"
+              }
+            </p>
+          </div>
+
+          <button
+  onClick={() => setShowAddItem(!showAddItem)}
+  className="
+    bg-cyan-500
+    hover:bg-cyan-400
+    px-4
+    py-2
+    rounded-2xl
+    font-bold
+  "
+>
+  + Add Item
+</button>
+
+</div>
+
+{showAddItem && (
+  <div
+    className="
+      mt-4
+      mb-4
+      space-y-3
+      bg-[#111827]
+      border
+      border-gray-700
+      rounded-2xl
+      p-4
+    "
+  >
+    <input
+      value={itemCode}
+      onChange={(e) => setItemCode(e.target.value)}
+      placeholder="Item Code"
+      className="
+        w-full
+        p-3
+        rounded-2xl
+        bg-[#1F2937]
+        border
+        border-gray-700
+      "
+    />
+
+    <input
+      value={itemName}
+      onChange={(e) => setItemName(e.target.value)}
+      placeholder="Item Name"
+      className="
+        w-full
+        p-3
+        rounded-2xl
+        bg-[#1F2937]
+        border
+        border-gray-700
+      "
+    />
+
+    <input
+      value={itemDescription}
+      onChange={(e) => setItemDescription(e.target.value)}
+      placeholder="Description"
+      className="
+        w-full
+        p-3
+        rounded-2xl
+        bg-[#1F2937]
+        border
+        border-gray-700
+      "
+    />
+
+    <button
+      onClick={addItem}
+      className="
+        w-full
+        bg-cyan-500
+        hover:bg-cyan-400
+        py-3
+        rounded-2xl
+        font-bold
+      "
+    >
+      Save Item
+    </button>
+  </div>
+)}
+
+<input
+  placeholder="Search Item..."
+  value={searchItem}
+  onChange={(e) => setSearchItem(e.target.value)}
+  className="
+    w-full
+    p-3
+    rounded-2xl
+    bg-[#111827]
+    border
+    border-gray-700
+    mb-4
+  "
+/>
+
+        {items
+  .filter(
+    (item) =>
+      item.customerId === selectedCustomer &&
+      (
+        item.name
+          .toLowerCase()
+          .includes(searchItem.toLowerCase()) ||
+        item.code
+          .toLowerCase()
+          .includes(searchItem.toLowerCase())
+      )
+  )
+  .length === 0 ? (
+
+  <div
+    className="
+      text-center
+      text-gray-500
+      py-10
+    "
+  >
+    No items yet.
+  </div>
+
+) : (
+
+  items
+    .filter(
+      (item) =>
+        item.customerId === selectedCustomer &&
+        (
+          item.name
+            .toLowerCase()
+            .includes(searchItem.toLowerCase()) ||
+          item.code
+            .toLowerCase()
+            .includes(searchItem.toLowerCase())
+        )
+    )
+    .map((item) => (
+
+  <div
+    key={item.id}
+    className="
+      bg-[#111827]
+      border
+      border-gray-700
+      rounded-2xl
+      p-4
+      mb-3
+    "
+  >
+    
+
+    <div className="flex justify-between items-start">
+
+      <div>
+
+        <div className="font-bold">
+          {item.code}
+        </div>
+
+        <div className="text-gray-300">
+          {item.name}
+        </div>
+
+      </div>
+
+      <div className="relative">
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+
+            setOpenItemMenu(
+              openItemMenu === item.id
+                ? null
+                : item.id
+            );
+          }}
+          className="p-2 hover:bg-gray-700 rounded-xl"
+        >
+          <MoreVertical size={18} />
+        </button>
+
+        {openItemMenu === item.id && (
+
+          <div
+            className="
+              absolute
+              right-0
+              top-10
+              w-32
+              bg-[#111827]
+              border
+              border-gray-700
+              rounded-2xl
+              overflow-hidden
+              z-50
+            "
+          >
+
+            <button
+                onClick={() => {
+                  setEditingItemId(item.id);
+                  setEditItemCode(item.code);
+                  setEditItemName(item.name);
+                  setEditItemDescription(item.description ?? "");
+                  setOpenItemMenu(null);
+                }}
+                className="
+                  w-full
+                  p-3
+                  text-left
+                  hover:bg-gray-700
+                "
+>
+                Edit
+          </button>
+
+          <button
+            className="
+              w-full
+              p-3
+              text-left
+              hover:bg-gray-700
+            "
+          >
+            View
+          </button>
+
+          <button
+            onClick={() => {
+              deleteItem(item.id);
+              setOpenItemMenu(null);
+            }}
+            className="
+              w-full
+              p-3
+              text-left
+              text-red-400
+              hover:bg-gray-700
+            "
+          >
+            Delete
+          </button>
+
+          </div>
+
+        )}
+
+      </div>
+
+    </div>
+
+  </div>
+
+))
+
+)}
 
       </div>
 

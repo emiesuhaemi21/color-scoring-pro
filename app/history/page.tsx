@@ -573,135 +573,75 @@ p-5
 
 {/* TOP NAV */}
 
-<div className="
-flex
-flex-wrap
-gap-3
-mb-8
-">
+<div className="flex flex-wrap gap-3 mb-6">
 
-<a
+        <a
+          href="/"
+          className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+            pathname === "/"
+              ? "bg-cyan-500 border-cyan-400 text-white"
+              : "bg-[#1F2937] border-gray-700 text-white"
+          }`}
+        >
+          Home
+        </a>
 
-href="/"
+        <a
+          href="/new-report"
+          className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+            pathname === "/new-report"
+              ? "bg-cyan-500 border-cyan-400 text-white"
+              : "bg-[#1F2937] border-gray-700 text-white"
+          }`}
+        >
+          New Report
+        </a>
 
-className={`
-border
-px-4
-py-3
-rounded-2xl
+        <a
+          href="/color-library"
+          className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+            pathname === "/color-library"
+              ? "bg-cyan-500 border-cyan-400 text-white"
+              : "bg-[#1F2937] border-gray-700 text-white"
+          }`}
+        >
+          Color Library
+        </a>
 
-${
-pathname==="/"
+        <a
+          href="/customer"
+          className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+            pathname === "/customer"
+              ? "bg-cyan-500 border-cyan-400 text-white"
+              : "bg-[#1F2937] border-gray-700 text-white"
+          }`}
+        >
+          Customer
+        </a>
 
-? "bg-cyan-500"
+        <a
+          href="/history"
+          className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+            pathname === "/history"
+              ? "bg-cyan-500 border-cyan-400 text-white"
+              : "bg-[#1F2937] border-gray-700 text-white"
+          }`}
+        >
+          New Report
+        </a>
 
-: "bg-[#1F2937]"
-}
+        <a
+          href="/settings"
+          className={`border px-4 py-3 rounded-2xl text-sm font-medium ${
+            pathname === "/settings"
+              ? "bg-cyan-500 border-cyan-400 text-white"
+              : "bg-[#1F2937] border-gray-700 text-white"
+          }`}
+        >
+          Settings
+        </a>
 
-`}
-
->
-
-Home
-
-</a>
-
-<a
-
-href="/new-report"
-
-className="
-bg-[#1F2937]
-border
-border-gray-700
-px-4
-py-3
-rounded-2xl
-"
-
->
-
-New Report
-
-</a>
-
-<a
-
-href="/color-library"
-
-className="
-bg-[#1F2937]
-border
-border-gray-700
-px-4
-py-3
-rounded-2xl
-"
-
->
-
-Color Library
-
-</a>
-
-<a
-
-href="/customer"
-
-className="
-bg-[#1F2937]
-border
-border-gray-700
-px-4
-py-3
-rounded-2xl
-"
-
->
-
-Customer
-
-</a>
-
-<a
-
-href="/history"
-
-className="
-bg-cyan-500
-border
-border-cyan-400
-px-4
-py-3
-rounded-2xl
-"
-
->
-
-My Report
-
-</a>
-
-<a
-
-href="/settings"
-
-className="
-bg-[#1F2937]
-border
-border-gray-700
-px-4
-py-3
-rounded-2xl
-"
-
->
-
-Settings
-
-</a>
-
-</div>
+      </div>
 
 
 {/* HEADER */}
